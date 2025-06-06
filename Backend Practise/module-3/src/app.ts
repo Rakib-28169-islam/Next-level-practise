@@ -1,10 +1,11 @@
 import express, { Application, Request, Response } from 'express';
-import { router as userRoutes } from './routes/userRoutes';
+// import { router as userRoutes } from './routes/userRoutes';
+import { router as todosRoutes } from './routes/todos.routes';
 const app: Application = express();
 const port = 3000;
 // Middleware to parse JSON
 app.use(express.json());
-app.use('/users', userRoutes);
+app.use('/todos', todosRoutes);
 
 
 

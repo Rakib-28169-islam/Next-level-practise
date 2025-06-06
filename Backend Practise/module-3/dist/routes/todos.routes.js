@@ -8,24 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("./app"));
-const mongodb_config_1 = require("./config/mongodb.config");
-const port = 3000;
-const runServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield mongodb_config_1.client.connect();
-        console.log("Connected to MongoDB");
-        app_1.default.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-            //   console.log(collection);
-        });
-    }
-    catch (error) {
-        console.error("Error starting the server:", error);
-    }
+exports.router = void 0;
+const mongodb_config_1 = require("./../config/mongodb.config");
+const express_1 = require("express");
+exports.router = (0, express_1.Router)();
+exports.router.get("/create-todo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield mongodb_config_1.todosCollection.insertOne({
+        title: "Learn Node.js",
+        body: "Learn Node.js with Express and MongoDB",
+        priority: "High",
+        status: "Pending",
+        createdAt: new Date()
+    });
+    const todos = yield mongodb_config_1.todosCollection.find({}).toArray();
+    res.send(todos);
+}));
+exports.router.get("/:id", (req, res) => {
+    const userId = req.params.id;
+    const query = req.query;
+    res.send(`User with ID: ${userId}`);
 });
-runServer();
