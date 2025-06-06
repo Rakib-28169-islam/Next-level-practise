@@ -4,19 +4,22 @@ import { Router } from "express";
 export const router = Router();
 
 router.get("/create-todo", async(req, res) => {
+  const { title, body, priority, status } = req.body;
   await todosCollection.insertOne({
-    title:"Learn Node.js",
-    body:"Learn Node.js with Express and MongoDB",
-    priority: "High",
-    status: "Pending",
-    createdAt: new Date() 
+    title,
+    body,
+    priority,
+    status: status || "pending",
+    createdAt: new Date(),
    })
    const todos = await todosCollection.find({}).toArray();
    res.send(todos);
 
 });
-router.get("/:id", (req, res) => {
-  const userId = req.params.id;
-  const query = req.query;
-  res.send(`User with ID: ${userId}`);
+router.get("/", async (req, res) => {
+  const todos =await todosCollection.find({}).toArray();
+  res.json({
+    message: "Todos route is working",
+    todos
+  });
 });
